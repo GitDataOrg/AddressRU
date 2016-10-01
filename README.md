@@ -35,8 +35,8 @@
 Указанное выше уведомление об авторском праве и данные условия должны быть включены во все копии или значимые части данного Программного Обеспечения.
 
 ## Ссылки
-- [Официальный сайт ФИАС](http://fias.nalog.ru/);
-- [Официальная ссылка на актуальную базу КЛАДР](http://fias.nalog.ru/Public/Downloads/Actual/base.arj);
-- [Формат JSON](https://tools.ietf.org/html/rfc4627);
-- [Сайт группы разработки GitData](http://www.gitdata.net);
-- [Станица проекта на GitData](http://address.gitdata.ru);
+- [Официальный сайт ФИАС](http://fias.nalog.ru/)
+- [Официальная ссылка на актуальную базу КЛАДР](http://fias.nalog.ru/Public/Downloads/Actual/base.arj)
+- [Формат JSON](https://tools.ietf.org/html/rfc4627)
+- [Сайт группы разработки GitData](http://www.gitdata.net)
+- [Станица проекта на GitData](http://address.gitdata.ru)
