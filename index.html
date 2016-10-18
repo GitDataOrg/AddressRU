@@ -55,6 +55,9 @@
         font-size: 14px;
         box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
       }
+      
+      #gitAddress input { width: 100px; }
+      #gitAddress select { width: 150px; }      
     </style>
   </head>
   <body>
@@ -69,8 +72,76 @@
       <a href="www.gitdata.net" target="_blank">www.gitdata.net</a><br />
       <small>(в виду начала проекта находится в разработке)</small></p>
       <p></p>
-      <p>База данных адресного классификатора:<br/> <a href="data/" target="_blank">в папке data</a></p>
+      <p>База данных адресного классификатора находится<a href="data/" target="_blank">в папке data</a></p>
+      
+      <hr>
+      <h1>Пример работы с данными</h1>
+      <form id="gitAddress">
+        <input id="gitCode" value="" readonly="readonly" />
+        <input id="gitPost" value="" readonly="readonly" />
+      </form>
     </div>
+    
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript">
+      var base = "https://GitDataOrg.github.io/AddressRU/data/";
+      var socrbase = {};
+      function gitData(code, index, callback){
+        $.ajax({
+          type: "GET",
+          url: base + code + ".json",
+          dataType: "json",
+          success: function(data) {
+            if (code == "socrbase") {
+              socrbase = data;
+              if (callback) callback();
+            } else {
+              data.sort(sortObject);
+              var selectList = document.createElement("select");
+              selectList.attributes["code"] = code == "00" ? "" : code;
+              selectList.attributes["index"] = index;
+              selectList.appendChild(document.createElement("option"));
+              for (i=0,c=data.length; i<c; ++i) {
+                item = data[i];
+                var option = document.createElement("option");
+                name = item[1];
+                if (socrbase[item[2]]) name += " " + socrbase[item[2]];
+                option.value = item[0];
+                option.text = name;
+                option.attributes["postcode"] = item[3] || "";
+                selectList.appendChild(option);
+              };
+              document.getElementById("gitAddress").appendChild(selectList);
+              selectList.onchange = function(){onSelect(this);};
+              if (callback) callback();
+            }
+          },
+          error: function(err){
+            console.log("Error:", err);
+          },
+        });
+      };
+      function sortObject(a, b){
+        return (a[1] < b[1]) ? -1 : 1;
+      };
+      function onSelect(obj) {
+        var index = obj.attributes["index"] || 0;
+        var code = obj.attributes["code"] + obj.value;
+        var div = document.getElementById("gitAddress");
+        var elems = div.getElementsByTagName("select");
+        for (i=0,c=elems.length; i<c; ++i) {
+          var elem = elems[i];
+          if (elem.attributes["index"] > index) {
+            div.removeChild(elem);
+          }
+        };
+        document.getElementById("gitCode").value = code;
+        document.getElementById("gitPost").value = obj.options[obj.selectedIndex].attributes["postcode"];
+        gitData(code, index + 1);
+      };
+      gitData("socrbase", 0, gitData("00"));
+    </script>
     
     <!-- Yandex.Metrika counter --> <script type="text/javascript"> (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter39957705 = new Ya.Metrika({ id:39957705, clickmap:true, trackLinks:true, accurateTrackBounce:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks"); </script> <noscript><div><img src="https://mc.yandex.ru/watch/39957705" style="position:absolute; left:-9999px;" alt="" /></div></noscript> <!-- /Yandex.Metrika counter -->
     <!-- Google.Analytics --> <script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
